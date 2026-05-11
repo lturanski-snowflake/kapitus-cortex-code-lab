@@ -34,11 +34,6 @@ tool_resources:
     warehouse: "KAPITUS_TRAINING_WH"
 $$;
 
--- Query the agent:
--- SELECT SNOWFLAKE.CORTEX.DATA_AGENT_RUN(
---     'KAPITUS_TRAINING.TRAINING_LUKE.LOAN_ANALYTICS_AGENT',
---     '{"messages":[{"role":"user","content":[{"type":"text","text":"What is the total loan volume by industry?"}]}]}'
--- );
 --
 -- NOTE: If you get a warehouse error, test the agent in Snowsight's Agent UI instead.
 -- Navigate to: AI & ML > Cortex Agents > LOAN_ANALYTICS_AGENT > Try it
