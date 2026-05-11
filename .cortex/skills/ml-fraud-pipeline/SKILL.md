@@ -163,9 +163,9 @@ PREDICTION_RESULT['output_feature_0']::FLOAT    -- probability of not fraud (cla
 PREDICTION_RESULT['output_feature_1']::FLOAT    -- probability of fraud (class 1)
 ```
 
-**Routing threshold: 0.6**
-- Fraud probability < 0.6 → INSERT into `AUTO_APPROVED`
-- Fraud probability ≥ 0.6 → INSERT into `FLAGGED_FOR_REVIEW`
+**Routing threshold: 0.3**
+- Fraud probability < 0.3 → INSERT into `AUTO_APPROVED`
+- Fraud probability ≥ 0.3 → INSERT into `FLAGGED_FOR_REVIEW`
 - ALL predictions → INSERT into `PREDICTION_AUDIT_LOG`
 
 ## Output Tables

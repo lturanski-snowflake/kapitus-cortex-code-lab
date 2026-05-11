@@ -171,7 +171,7 @@ Use skill .cortex/skills/ml-fraud-pipeline/SKILL.md. Score all PENDING applicati
 using FRAUD_DETECTION_MODEL!PREDICT_PROBA(). Pass feature columns positionally. 
 Store in FRAUD_SCORES table.
 
-Then route: probability < 0.6 → AUTO_APPROVED, >= 0.6 → FLAGGED_FOR_REVIEW 
+Then route: probability < 0.3 → AUTO_APPROVED, >= 0.3 → FLAGGED_FOR_REVIEW 
 (join mart for business details). Log all to PREDICTION_AUDIT_LOG.
 
 Parse results with bracket notation: 

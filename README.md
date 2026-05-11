@@ -124,8 +124,8 @@ All prompts are in **[`prompts/lab_guide.md`](prompts/lab_guide.md)** — open i
 
 ### Fraud Routing
 ```
-Fraud Probability < 0.6  →  AUTO_APPROVED
-Fraud Probability ≥ 0.6  →  FLAGGED_FOR_REVIEW → Streamlit App → Human Decision
+Fraud Probability < 0.3  →  AUTO_APPROVED
+Fraud Probability ≥ 0.3  →  FLAGGED_FOR_REVIEW → Streamlit App → Human Decision
 ALL predictions          →  PREDICTION_AUDIT_LOG
 ```
 
