@@ -100,7 +100,9 @@ def main(session):
     precision = round(precision_score(y_test, y_pred), 4)
     recall = round(recall_score(y_test, y_pred), 4)
 
-    reg = Registry(session=session)
+    reg = Registry(session=session,
+                    database_name='KAPITUS_TRAINING',
+                    schema_name=session.get_current_schema())
     sample_input = X_train.head(10)
 
     mv = reg.log_model(
@@ -108,6 +110,8 @@ def main(session):
         version_name='V1',
         model=model,
         sample_input_data=sample_input,
+        target_platforms=['WAREHOUSE'],
+        options={'method_options': {'predict_proba': {'case_sensitive': False}}},
         comment=f'XGBoost fraud detection. F1={f1}, Precision={precision}, Recall={recall}'
     )
 
@@ -121,9 +125,9 @@ $$;
 
 **⚠️ STOPPING POINT:** Call the sproc: `CALL TRAIN_FRAUD_MODEL();` — takes 1-2 minutes.
 
-## Step 3: Score Applications with MODEL!PREDICT()
+## Step 3: Score Applications with MODEL!PREDICT_PROBA()
 
-After the model is registered, score using SQL:
+After the model is registered, score using SQL. Use `PREDICT_PROBA` to get probability output (not just class):
 
 ```sql
 CREATE OR REPLACE TABLE FRAUD_SCORES AS
@@ -138,7 +142,7 @@ WITH pending_features AS (
 )
 SELECT
     APPLICATION_ID,
-    FRAUD_DETECTION_MODEL!PREDICT(
+    FRAUD_DETECTION_MODEL!PREDICT_PROBA(
         LOAN_AMOUNT, LOAN_TERM_MONTHS, INTEREST_RATE, CREDIT_SCORE,
         YEARS_IN_BUSINESS, ANNUAL_REVENUE, EMPLOYEE_COUNT, EXISTING_DEBT,
         COLLATERAL_VALUE, LOAN_TO_REVENUE_RATIO, DEBT_TO_REVENUE_RATIO,
@@ -153,11 +157,10 @@ FROM pending_features;
 
 ## Step 4: Parse and Route Predictions
 
-**Parsing syntax (Model Registry XGBoost output):**
+**Parsing syntax (Model Registry XGBoost PREDICT_PROBA output):**
 ```sql
-PREDICTION_RESULT['output_feature_0']::INTEGER    -- predicted class (0 or 1)
-PREDICTION_RESULT['predict_proba_1']::FLOAT       -- probability of fraud (class 1)
-PREDICTION_RESULT['predict_proba_0']::FLOAT       -- probability of not fraud
+PREDICTION_RESULT['output_feature_0']::FLOAT    -- probability of not fraud (class 0)
+PREDICTION_RESULT['output_feature_1']::FLOAT    -- probability of fraud (class 1)
 ```
 
 **Routing threshold: 0.6**

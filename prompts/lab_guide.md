@@ -113,6 +113,10 @@ Use skill .cortex/skills/ml-fraud-pipeline/SKILL.md. Create a stored procedure c
 - Evaluates F1, precision, recall on test set
 - Registers to Model Registry as FRAUD_DETECTION_MODEL version V1 using 
   snowflake.ml.registry.Registry.log_model() with sample_input_data
+- CRITICAL: Use target_platforms=['WAREHOUSE'] so the model can be called via SQL
+- CRITICAL: Enable predict_proba method so we get probability output (not just class).
+  Use options={'method_options': {'predict_proba': {'case_sensitive': False}}}
+- Pass database_name and schema_name explicitly to Registry() constructor
 - Returns metrics string
 
 Use LANGUAGE PYTHON, RUNTIME_VERSION='3.10', 
@@ -164,15 +168,14 @@ columns), and PREDICTION_AUDIT_LOG (with UUID audit ID) in my schema.
 
 ```
 Use skill .cortex/skills/ml-fraud-pipeline/SKILL.md. Score all PENDING applications (APPLICATION_ID LIKE 'NEW-%') 
-using FRAUD_DETECTION_MODEL!PREDICT(). Pass feature columns positionally. 
+using FRAUD_DETECTION_MODEL!PREDICT_PROBA(). Pass feature columns positionally. 
 Store in FRAUD_SCORES table.
 
 Then route: probability < 0.6 → AUTO_APPROVED, >= 0.6 → FLAGGED_FOR_REVIEW 
 (join mart for business details). Log all to PREDICTION_AUDIT_LOG.
 
 Parse results with bracket notation: 
-PREDICTION_RESULT['predict_proba_1']::FLOAT for probability,
-PREDICTION_RESULT['output_feature_0']::INTEGER for class.
+PREDICTION_RESULT['output_feature_1']::FLOAT for fraud probability.
 
 Show me final counts.
 ```
