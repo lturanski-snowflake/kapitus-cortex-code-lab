@@ -205,7 +205,7 @@ FROM TABLE(GENERATOR(ROWCOUNT => 50000));
 
 --------------------------------------------------------------------
 -- Add a fraud indicator to LOAN_APPLICATIONS for ML use case
--- (Synthetic: ~8% fraud rate based on feature combinations)
+-- (Synthetic: ~15% fraud rate based on feature combinations — strong signal)
 --------------------------------------------------------------------
 ALTER TABLE LOAN_APPLICATIONS ADD COLUMN IF NOT EXISTS IS_FRAUDULENT BOOLEAN DEFAULT FALSE;
 
@@ -214,16 +214,20 @@ SET IS_FRAUDULENT = TRUE
 WHERE (
     LOAN_AMOUNT > 500000
     AND RISK_TIER = 'HIGH'
-    AND UNIFORM(0, 100, RANDOM()) < 40
+    AND COLLATERAL_TYPE = 'Unsecured'
 ) OR (
     SUBMITTED_CHANNEL = 'Online'
     AND LOAN_TERM_MONTHS <= 12
     AND LOAN_AMOUNT > 300000
-    AND UNIFORM(0, 100, RANDOM()) < 25
+    AND RISK_TIER = 'HIGH'
 ) OR (
     COLLATERAL_TYPE = 'Unsecured'
     AND LOAN_AMOUNT > 400000
-    AND UNIFORM(0, 100, RANDOM()) < 30
+    AND SUBMITTED_CHANNEL = 'Online'
+) OR (
+    LOAN_AMOUNT > 700000
+    AND LOAN_TERM_MONTHS <= 12
+    AND RISK_TIER = 'HIGH'
 );
 
 --------------------------------------------------------------------
