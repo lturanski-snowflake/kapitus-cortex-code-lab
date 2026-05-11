@@ -36,6 +36,11 @@ Patterns for: Snowpark Python stored procedure (XGBoost training + Model Registr
 
 # Instructions
 
+**CRITICAL: Before creating ANY objects (procedures, models, tables, views), ensure 
+the session is using KAPITUS_TRAINING_ROLE. Never create objects as ACCOUNTADMIN.
+Run `USE ROLE KAPITUS_TRAINING_ROLE;` first. The model, procedure, and output tables 
+MUST be owned by KAPITUS_TRAINING_ROLE or attendees won't be able to access them.**
+
 ## Step 1: Create Training Feature View
 
 **Actions:**

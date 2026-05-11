@@ -43,6 +43,11 @@ Their KapitusPLUS application process allows business owners to fill out one app
 - **Schema:** Your personal schema (e.g., TRAINING_LUKE)
 - **Warehouse:** KAPITUS_TRAINING_WH
 
+**CRITICAL: Always execute `USE ROLE KAPITUS_TRAINING_ROLE` before creating ANY objects.
+Never create objects as ACCOUNTADMIN. All Dynamic Tables, views, models, agents, 
+Streamlit apps, stages, and procedures MUST be owned by KAPITUS_TRAINING_ROLE.
+If the session is using a different role, switch first.**
+
 ## IMPORTANT: Schema Layout
 
 **Source data** lives in a shared read-only schema:
