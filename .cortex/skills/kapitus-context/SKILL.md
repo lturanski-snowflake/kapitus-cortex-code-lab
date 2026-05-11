@@ -20,7 +20,7 @@ type: snowflake
 # Kapitus Lab Context
 
 ## When to Use
-- Any prompt during the Kapitus Cortex Code hands-on lab
+- Any relevant prompt during the Kapitus Cortex Code hands-on lab
 - Working with KAPITUS_TRAINING database objects
 - Building on loan application, borrower, decision, or payment data
 
