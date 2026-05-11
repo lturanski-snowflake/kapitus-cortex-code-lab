@@ -59,7 +59,7 @@ Explain the join keys between them.
 ### 1.3 — Create the Dynamic Table
 
 ```
-$kapitus-context Create a Dynamic Table called LOAN_ANALYTICS_MART in my current 
+Use skill .cortex/skills/kapitus-context/SKILL.md. Create a Dynamic Table called LOAN_ANALYTICS_MART in my current 
 schema that refreshes every 1 hour using KAPITUS_TRAINING_WH.
 
 It should READ from SOURCE_DATA schema tables:
@@ -98,7 +98,7 @@ average loan amount by industry, and fraud rate by risk tier.
 ### 2.1 — Create Feature View
 
 ```
-$ml-fraud-pipeline Create a view called FRAUD_TRAINING_DATA in my schema from 
+Use skill .cortex/skills/ml-fraud-pipeline/SKILL.md. Create a view called FRAUD_TRAINING_DATA in my schema from 
 my LOAN_ANALYTICS_MART with all numeric features and one-hot encoded categoricals 
 as described in the skill. Filter out null LOAN_AMOUNT and CREDIT_SCORE rows.
 ```
@@ -106,7 +106,7 @@ as described in the skill. Filter out null LOAN_AMOUNT and CREDIT_SCORE rows.
 ### 2.2 — Create Training Stored Procedure
 
 ```
-$ml-fraud-pipeline Create a stored procedure called TRAIN_FRAUD_MODEL that:
+Use skill .cortex/skills/ml-fraud-pipeline/SKILL.md. Create a stored procedure called TRAIN_FRAUD_MODEL that:
 - Reads FRAUD_TRAINING_DATA into pandas (excluding APPLICATION_ID from features)
 - Splits 75/25 stratified train/test
 - Trains XGBClassifier (n_estimators=100, max_depth=6, learning_rate=0.1)
@@ -124,7 +124,7 @@ PACKAGES=('snowflake-snowpark-python','snowflake-ml-python','xgboost','scikit-le
 If you prefer a notebook approach instead of a sproc:
 
 ```
-$ml-fraud-pipeline Create a Snowflake Notebook that trains the fraud detection 
+Use skill .cortex/skills/ml-fraud-pipeline/SKILL.md. Create a Snowflake Notebook that trains the fraud detection 
 model. It should have cells for:
 1. Import libraries and get active session
 2. Load FRAUD_TRAINING_DATA into pandas
@@ -144,7 +144,7 @@ CALL TRAIN_FRAUD_MODEL();
 ### 2.4 — Insert New Applications to Score
 
 ```
-$kapitus-context Insert 50 new PENDING loan applications into 
+Use skill .cortex/skills/kapitus-context/SKILL.md. Insert 50 new PENDING loan applications into 
 SOURCE_DATA.LOAN_APPLICATIONS with realistic random data (various industries, 
 loan amounts $10K-$1M, mix of risk tiers and channels). Use APPLICATION_IDs 
 starting with 'NEW-'. Then refresh my LOAN_ANALYTICS_MART so they appear in 
@@ -156,14 +156,14 @@ Or run `sql/04b_insert_new_applications.sql` directly.
 ### 2.5 — Create Output Tables
 
 ```
-$ml-fraud-pipeline Create AUTO_APPROVED, FLAGGED_FOR_REVIEW (with review workflow 
+Use skill .cortex/skills/ml-fraud-pipeline/SKILL.md. Create AUTO_APPROVED, FLAGGED_FOR_REVIEW (with review workflow 
 columns), and PREDICTION_AUDIT_LOG (with UUID audit ID) in my schema.
 ```
 
 ### 2.6 — Score and Route
 
 ```
-$ml-fraud-pipeline Score all PENDING applications (APPLICATION_ID LIKE 'NEW-%') 
+Use skill .cortex/skills/ml-fraud-pipeline/SKILL.md. Score all PENDING applications (APPLICATION_ID LIKE 'NEW-%') 
 using FRAUD_DETECTION_MODEL!PREDICT(). Pass feature columns positionally. 
 Store in FRAUD_SCORES table.
 
@@ -184,7 +184,7 @@ Show me final counts.
 ### 3.1 — Create the App
 
 ```
-$kapitus-context Create a Streamlit in Snowflake app for reviewing flagged loans.
+Use skill .cortex/skills/kapitus-context/SKILL.md. Create a Streamlit in Snowflake app for reviewing flagged loans.
 
 IMPORTANT: Use fully qualified table names because Streamlit runtime does NOT 
 inherit USE SCHEMA. Dynamically build the FQ prefix using:
@@ -238,7 +238,7 @@ Open the app, verify flagged applications appear, approve/decline a few.
 ### 4.1 — Create Semantic View
 
 ```
-$kapitus-context Create a Semantic View called LOAN_ANALYTICS_SV in my schema 
+Use skill .cortex/skills/kapitus-context/SKILL.md. Create a Semantic View called LOAN_ANALYTICS_SV in my schema 
 over my LOAN_ANALYTICS_MART.
 
 Include key columns with labels/descriptions. Define metrics: TOTAL_LOAN_VOLUME 
@@ -254,7 +254,7 @@ Filters: INDUSTRY, STATE, RISK_TIER, LOAN_PURPOSE, SUBMITTED_CHANNEL.
 Replace `TRAINING_LUKE` below with your actual schema name:
 
 ```
-$kapitus-context Create a Cortex Agent called LOAN_ANALYTICS_AGENT in my schema.
+Use skill .cortex/skills/kapitus-context/SKILL.md. Create a Cortex Agent called LOAN_ANALYTICS_AGENT in my schema.
 Use claude-3-5-sonnet. Add an ANALYST_TOOL pointing to 
 KAPITUS_TRAINING.TRAINING_LUKE.LOAN_ANALYTICS_SV (my semantic view).
 System prompt: "You are a loan analytics assistant for Kapitus. Provide specific 

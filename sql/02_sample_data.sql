@@ -240,3 +240,11 @@ SELECT 'PAYMENT_HISTORY', COUNT(*) FROM PAYMENT_HISTORY;
 SELECT 'Fraud Rate' AS METRIC, 
        ROUND(SUM(CASE WHEN IS_FRAUDULENT THEN 1 ELSE 0 END)::FLOAT / COUNT(*) * 100, 2) || '%' AS VALUE
 FROM LOAN_APPLICATIONS;
+
+--------------------------------------------------------------------
+-- Grant DML on SOURCE_DATA tables to training role
+-- (Must run AFTER tables are created — FUTURE grants don't apply
+--  to tables owned by ACCOUNTADMIN in an existing schema)
+--------------------------------------------------------------------
+GRANT INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA KAPITUS_TRAINING.SOURCE_DATA TO ROLE KAPITUS_TRAINING_ROLE;
+GRANT SELECT ON ALL TABLES IN SCHEMA KAPITUS_TRAINING.SOURCE_DATA TO ROLE KAPITUS_TRAINING_ROLE;
