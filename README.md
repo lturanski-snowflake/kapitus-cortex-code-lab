@@ -27,12 +27,37 @@ Using **Cortex Code** as your AI pair programmer, you'll build a complete fraud 
 
 ## Getting Started
 
-### 1. Open Cortex Code
+### 1. Get the Lab Files
+
+Choose one of these options to get the repo into your workspace:
+
+**Option A — Connect Git repo (recommended for VS Code CLI):**
+```bash
+git clone https://github.com/lturanski-snowflake/kapitus-cortex-code-lab.git
+cd kapitus-cortex-code-lab
+cortex
+```
+
+**Option B — Connect Git repo in Snowsight:**
+1. In Snowsight, go to **Projects → Git Repositories**
+2. Click **+ Git Repository**
+3. Paste the repo URL: `https://github.com/lturanski-snowflake/kapitus-cortex-code-lab.git`
+4. Select your database/schema and create
+5. Open Cortex Code from the left nav — the repo files are now accessible
+
+**Option C — Upload folder directly in Snowsight:**
+1. Download/clone this repo to your local machine
+2. In Snowsight, open **Cortex Code** from the left nav
+3. Click the **+** (attach) button in the chat input area
+4. Select **Upload Folder** and choose the cloned `kapitus-cortex-code-lab` folder
+5. All files (prompts, skills, SQL) will be available in your workspace
+
+### 2. Open Cortex Code
 
 - **Snowsight:** Click the Cortex Code chat icon in the left nav
 - **VS Code CLI:** Run `cortex` in terminal
 
-### 2. Set Your Context
+### 3. Set Your Context
 
 > **IMPORTANT:** You MUST switch to `KAPITUS_TRAINING_ROLE` before starting. 
 > Most attendees will NOT have `ACCOUNTADMIN`. All lab operations should run 
@@ -45,7 +70,7 @@ USE SCHEMA TRAINING_<USERNAME>;
 USE WAREHOUSE KAPITUS_TRAINING_WH;
 ```
 
-### 3. Load Skills
+### 4. Load Skills
 
 Skills teach Cortex Code your project's specifics. Reference them by local file path in your prompts:
 
@@ -58,7 +83,7 @@ Skills teach Cortex Code your project's specifics. Reference them by local file 
 - **VS Code CLI:** Auto-discovered from `.cortex/skills/` when repo is open
 - **Snowsight:** Attach the skill `.md` file to your chat message when the prompt calls for it
 
-### 4. Pre-Flight Check
+### 5. Pre-Flight Check
 
 Run the verification script to confirm all grants are in place:
 
