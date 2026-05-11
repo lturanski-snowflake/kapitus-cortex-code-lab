@@ -34,6 +34,10 @@ Using **Cortex Code** as your AI pair programmer, you'll build a complete fraud 
 
 ### 2. Set Your Context
 
+> **IMPORTANT:** You MUST switch to `KAPITUS_TRAINING_ROLE` before starting. 
+> Most attendees will NOT have `ACCOUNTADMIN`. All lab operations should run 
+> entirely under the training role.
+
 ```sql
 USE ROLE KAPITUS_TRAINING_ROLE;
 USE DATABASE KAPITUS_TRAINING;
@@ -43,25 +47,28 @@ USE WAREHOUSE KAPITUS_TRAINING_WH;
 
 ### 3. Load Skills
 
-Skills teach Cortex Code your project's specifics. Invoke them with `$skill-name`:
+Skills teach Cortex Code your project's specifics. Reference them by local file path in your prompts:
 
-| Skill | When to Use | Invocation |
+| Skill | When to Use | File Path |
 |-------|-------------|-----------|
-| `kapitus-context` | Dynamic Tables, Streamlit, Agents | `$kapitus-context ...` |
-| `ml-fraud-pipeline` | Model training, scoring, routing | `$ml-fraud-pipeline ...` |
+| `kapitus-context` | Dynamic Tables, Streamlit, Agents | `.cortex/skills/kapitus-context/SKILL.md` |
+| `ml-fraud-pipeline` | Model training, scoring, routing | `.cortex/skills/ml-fraud-pipeline/SKILL.md` |
 
 **To load:**
 - **VS Code CLI:** Auto-discovered from `.cortex/skills/` when repo is open
-- **Snowsight:** Upload the skill files via the attach/file button in chat
+- **Snowsight:** Attach the skill `.md` file to your chat message when the prompt calls for it
 
 ### 4. Pre-Flight Check
 
+Run the verification script to confirm all grants are in place:
+
 ```sql
+-- Run sql/00_verify_grants.sql or use this quick check:
 SELECT 'SOURCE_DATA' AS CHECK, COUNT(*) AS TABLES
 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'SOURCE_DATA';
 ```
 
-Should return 4 tables. If not, check your role grants.
+Should return 4 tables. If any checks fail, ask your admin to re-run `sql/01_environment_setup.sql`.
 
 ---
 
@@ -111,11 +118,19 @@ See the teardown section at the end of `prompts/lab_guide.md`. Everything is com
 HoL/
 ├── README.md                                    ← You are here
 ├── prompts/
-│   └── lab_guide.md                             ← All prompts (Modules 0-4)
+│   ├── lab_guide.md                             ← All prompts (Modules 0-4)
+│   └── module_prompts/                          ← Individual prompt files
+│       ├── 0_setup/
+│       ├── 1_data_mart/
+│       ├── 2_ML_Fraud_Detection/
+│       ├── 3_Streamlit_Review_App/
+│       ├── 4_SemanticView_Agent/
+│       └── 5_Teardown/
 ├── .cortex/skills/
 │   ├── kapitus-context/SKILL.md                 ← $kapitus-context
 │   └── ml-fraud-pipeline/SKILL.md               ← $ml-fraud-pipeline
 ├── sql/
+│   ├── 00_verify_grants.sql                     ← Pre-flight grant checker
 │   ├── 01_environment_setup.sql                 ← Admin asset (pre-lab)
 │   ├── 02_sample_data.sql                       ← Admin asset (pre-lab)
 │   ├── 03_dynamic_table_mart.sql                ← Reference: Module 1
@@ -125,7 +140,6 @@ HoL/
 │   ├── 06_semantic_view.sql                     ← Reference: Module 4
 │   ├── 07_cortex_agent.sql                      ← Reference: Module 4
 │   └── 08_teardown.sql                          ← Cleanup
-└── master_guide.md                              ← Instructor guide (internal)
 ```
 
 ---
