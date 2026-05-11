@@ -3,7 +3,7 @@ name: kapitus-context
 title: Kapitus Lab Context
 summary: Sets company context, environment, and table schemas for the Kapitus Cortex Code lab.
 description: >-
-  Use for ALL prompts during the Kapitus hands-on lab. Provides company context,
+  Use for relevant prompts during the Kapitus hands-on lab. Provides company context,
   Snowflake environment details, table schemas, and coding conventions.
   Triggers: kapitus, loan, application, borrower, training, lab, hands-on.
   Do NOT use for general Snowflake questions unrelated to this lab.
